@@ -42,3 +42,19 @@ jobs:
 
       - name: Run tests
         run: ./gradlew test
+
+      - name: Backend CI Discord Notification (Success)
+          uses: sarisia/actions-status-discord@v1
+          if: ${{ success() }}
+          with:
+            title: ✅ Backend CI success ✅
+            webhook: ${{ secrets.DISCORD_WEBHOOK }}
+            color: 00FF00
+
+      - name: Backend CI Discord Notification (Failure)
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ failure() }}
+        with:
+          title: ❗️  Backend CI failed ❗️
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          color: FF0000
