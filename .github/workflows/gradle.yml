@@ -37,23 +37,22 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Build with Gradle
-        run: ./gradlew build --build-cache --daemon
-
-      - name: Run tests
-        run: ./gradlew test --build-cache --daemon
+      - name: Build and Test with Gradle
+        run: |
+          ./gradlew build --build-cache --daemon
+          ./gradlew test --build-cache --daemon
 
       - name: Backend CI Discord Notification (Success)
-        uses: sarisia/actions-status-discord@v1
         if: ${{ success() }}
+        uses: sarisia/actions-status-discord@v1
         with:
           title: ✅ Backend CI success ✅
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           color: 00FF00
 
       - name: Backend CI Discord Notification (Failure)
-        uses: sarisia/actions-status-discord@v1
         if: ${{ failure() }}
+        uses: sarisia/actions-status-discord@v1
         with:
           title: ❗️ Backend CI failed ❗️
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
