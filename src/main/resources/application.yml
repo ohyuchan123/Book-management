@@ -1,8 +1,10 @@
+# 애플리케이션 정보 설정
 app:
   version: 1.0.1
   name: BookManagement
   description: This is my application
 
+# 서버 설정
 server:
   port: 8080
   servlet:
@@ -11,30 +13,34 @@ server:
       enabled: true
       force: true
 
+# Spring 설정
 spring:
   application:
-    name: BookManagement
+    name: BookManagement  # 애플리케이션 이름
+
   datasource:
-    url: jdbc:h2:~/onedayboot
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: 1234
+    url: jdbc:h2:tcp://localhost/~/onedayboot  # H2 데이터베이스 URL
+    driver-class-name: org.h2.Driver           # H2 드라이버 클래스 이름
+    username: sa                               # 데이터베이스 사용자 이름
+    password: 1234                             # 데이터베이스 비밀번호
+
   h2:
     console:
-      enabled: true
-      path: /h2-console
+      enabled: true         # H2 콘솔 활성화
+      path: /h2-console      # H2 콘솔에 접근할 경로
 
   jpa:
+    hibernate:
+      ddl-auto: update      # 애플리케이션 시작 시 데이터베이스 스키마를 업데이트
     properties:
       hibernate:
-        dialect:
-          org.hibernate.dialect.H2Dialect
-        format_sql: true
-#        show_sql: true
-        ddl-auto:
-          create
+        dialect: org.hibernate.dialect.H2Dialect  # H2 데이터베이스를 위한 Hibernate 방언 설정
+        format_sql: true       # SQL을 포맷된 상태로 출력
+        show_sql: true
+        hbm2ddl:
+          auto: update
 
+# 로깅 설정
 logging:
   level:
-    # logger에서 SQL을 보기 위해 -> show_sql은 system.out으로 뜨기 때문에 주석으로 빼줘야 된다.
-    org.hibernate.sql : debug
+    org.hibernate.sql: debug  # Hibernate SQL 로깅을 디버그 수준으로 설정
