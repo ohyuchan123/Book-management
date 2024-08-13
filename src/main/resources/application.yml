@@ -30,6 +30,11 @@ spring:
         dialect:
           org.hibernate.dialect.H2Dialect
         format_sql: true
-        show_sql: true
+#        show_sql: true
         hbm2ddl:
           auto: update
+
+logging:
+  level:
+    # logger에서 SQL을 보기 위해 -> show_sql은 system.out으로 뜨기 때문에 주석으로 빼줘야 된다.
+    org.hibernate.sql : debug
