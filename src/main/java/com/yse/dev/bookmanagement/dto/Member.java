@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 이렇게 함으로써 ID 값이 1씩 증가할
-    private Long id;
-    private String Username;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;          // 고유 ID (자동 증가)
+    private String username;  // 사용자 이름
 }
