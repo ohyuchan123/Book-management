@@ -10,7 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Member {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
-    private String firstName;
+    private String Username;
 }
