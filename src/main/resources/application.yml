@@ -31,8 +31,8 @@ spring:
           org.hibernate.dialect.H2Dialect
         format_sql: true
 #        show_sql: true
-        hbm2ddl:
-          auto: update
+        ddl-auto:
+          create
 
 logging:
   level:
