@@ -19,7 +19,7 @@ spring:
     name: BookManagement  # 애플리케이션 이름
 
   datasource:
-    url: jdbc:h2:tcp://localhost/~/onedayboot  # H2 데이터베이스 URL
+    url: jdbc:h2:~/onedayboot  # H2 데이터베이스 URL
     driver-class-name: org.h2.Driver           # H2 드라이버 클래스 이름
     username: sa                               # 데이터베이스 사용자 이름
     password: 1234                             # 데이터베이스 비밀번호
