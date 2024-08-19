@@ -1,0 +1,17 @@
+package com.yse.dev.bookmanagement.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller// 이 어노테이션에 있는 클래스는 스프링 부트가 브라우저의 요청을 받아들이는 컨트롤러라고 인지해서
+// 자바 빈으로 등록해서 관리하게 됩니다. 즉, 프레임워크에서 관리하는 클래스가 됩니다.
+public class BookController {
+
+    @GetMapping("/book/create")
+    public String create(){
+        // create 메소드는 브라우저에서 book/create 주소가 HTTP GET 방식으로 입력되었을 때
+        // book/create 경로의 뷰를 보여주는 컨트롤러 메소드입니다.
+        return "/book/create";
+    }
+
+}
