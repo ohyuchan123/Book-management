@@ -1,4 +1,4 @@
-package com.yse.dev.bookmanagement.controller;
+package com.yse.dev.bookmanagement.book.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
