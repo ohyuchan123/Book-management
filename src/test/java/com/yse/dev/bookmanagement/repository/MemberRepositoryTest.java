@@ -1,7 +1,7 @@
 package com.yse.dev.bookmanagement.repository;
 
-import com.yse.dev.bookmanagement.dto.Member;
-import jakarta.persistence.Id;
+import com.yse.dev.bookmanagement.test.dto.Member;
+import com.yse.dev.bookmanagement.test.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
