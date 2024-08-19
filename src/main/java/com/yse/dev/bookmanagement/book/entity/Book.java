@@ -1,8 +1,10 @@
 package com.yse.dev.bookmanagement.book.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,8 @@ import java.time.LocalDateTime;
 @Entity // JPA가 해당 클래스를 엔티티로 인식하기 위해 사용하는 어노테이션
 @Data // Lombok을 사용하여 Getter, Setter, toString, equals, hashCode 등을 자동으로 생성하는 어노테이션
 @Builder // Lombok을 사용하여 Builder 패턴을 자동으로 생성하는 어노테이션
+@AllArgsConstructor // 모든 필드를 인자로 받는 생성자를 생성
+@NoArgsConstructor // 기본 생성자를 생성
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +31,4 @@ public class Book {
 
     @CreationTimestamp
     private LocalDateTime localDateTime;
-
-    public Book() {
-
-    }
 }
