@@ -1,8 +1,7 @@
-package com.yse.dev.bookmanagement.repository;
+package com.yse.dev.bookmanagement.test.repository;
 
-import com.yse.dev.bookmanagement.dto.Member;
+import com.yse.dev.bookmanagement.test.dto.Member;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Id;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 

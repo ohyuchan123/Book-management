@@ -1,4 +1,4 @@
-package com.yse.dev.bookmanagement.dto;
+package com.yse.dev.bookmanagement.test.dto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
