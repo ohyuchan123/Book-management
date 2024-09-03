@@ -1,0 +1,21 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>책 상세</title>
+</head>
+<body>
+<h1>책 상세</h1>
+<p><label>제목</label> : <span th:text="${bookReadResponseDTO.title}"></span>
+<p><label>가격</label> : <span th:text="${#numbers.formatInteger(bookReadResponseDTO.price, 3, 'COMMA')}"></span>
+<p><label>입력일</label> : <span th:text="${#temporals.format(bookReadResponseDTO.insertDateTime, 'yyyy-MM-dd HH:mm')}"></span>
+<p>
+    <a th:href="@{/book/edit/{id}(id=${bookReadResponseDTO.bookId})}" th:text="수정"></a>
+</p>
+<form method="POST" th:action="@{/book/delete}" th:object="${bookReadResponseDTO}">
+    <input type="hidden" th:name="bookId" th:value="*{bookId}" />
+    <input type="submit" value="삭제" />
+</form>
+<p>
+    <a th:href="@{/book/list}" th:text="목록으로"></a>
+</p>
+</body>
+</html>

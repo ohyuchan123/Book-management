@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Unprocessable Entity
+    </title>
+</head>
+<body>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    var message = /*[[${message}]]*/ 'message';
+    var loc = /*[[${location}]]*/ 'location';
+    /*]]>*/
+    alert(message);
+    location.href = loc;
+</script>
+</body>
+</html>
