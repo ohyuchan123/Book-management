@@ -35,16 +35,18 @@ public class BookController {
 
     @GetMapping("/book/read/{bookId}")
     public ModelAndView read(@PathVariable Integer bookId){
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView(); // 뷰와 데이터를 함께 반환하기 위한 객체 생성
 
         try {
+            // bookId를 사용하여 도서 정보를 읽음(서비스 계층 호출)
             BookReadResponseDto readResponseDto = this.bookService.read(bookId);
             modelAndView.addObject("bookReadResponseDto", readResponseDto);
             modelAndView.setViewName("book/read");
         }catch (NoSuchElementException e){
-            modelAndView.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
+            // 도서를 찾을 수 없는 경우 (NoSuchElementException 발생 시 예외 처리)
+            modelAndView.setStatus(HttpStatus.UNPROCESSABLE_ENTITY); // HTTP 상태 코드 422 설정
             modelAndView.addObject("message", "Book not found");
-            modelAndView.addObject("location","/book");
+            modelAndView.addObject("location","/book"); // 사용자에게 보여줄 리디렉션 위치 정보 추가
             modelAndView.setViewName("common/error/422");
         }
 
