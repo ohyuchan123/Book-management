@@ -1,7 +1,7 @@
 package com.yse.dev.bookmanagement.book.controller;
 
 import com.yse.dev.bookmanagement.book.dto.BookCreateDTO;
-import com.yse.dev.bookmanagement.book.dto.BookReadResponseDto;
+import com.yse.dev.bookmanagement.book.dto.BookReadResponseDTO;
 import com.yse.dev.bookmanagement.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,8 +39,8 @@ public class BookController {
 
         try {
             // bookId를 사용하여 도서 정보를 읽음(서비스 계층 호출)
-            BookReadResponseDto readResponseDto = this.bookService.read(bookId);
-            modelAndView.addObject("bookReadResponseDto", readResponseDto);
+            BookReadResponseDTO readResponseDto = this.bookService.read(bookId);
+            modelAndView.addObject("bookReadResponseDTO", readResponseDto);
             modelAndView.setViewName("book/read");
         }catch (NoSuchElementException e){
             // 도서를 찾을 수 없는 경우 (NoSuchElementException 발생 시 예외 처리)
