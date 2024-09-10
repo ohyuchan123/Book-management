@@ -1,6 +1,7 @@
 package com.yse.dev.bookmanagement.book.controller;
 
 import com.yse.dev.bookmanagement.book.dto.BookCreateDTO;
+import com.yse.dev.bookmanagement.book.dto.BookEditResponseDTO;
 import com.yse.dev.bookmanagement.book.dto.BookReadResponseDTO;
 import com.yse.dev.bookmanagement.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class BookController {
     }
 
     @GetMapping("/book/read/{bookId}")
-    public ModelAndView read(@PathVariable Integer bookId){
+    public ModelAndView read(@PathVariable Integer bookId) throws NoSuchElementException {
         ModelAndView modelAndView = new ModelAndView(); // 뷰와 데이터를 함께 반환하기 위한 객체 생성
 
         // bookId를 사용하여 도서 정보를 읽음(서비스 계층 호출)
@@ -53,6 +54,16 @@ public class BookController {
         modelAndView.addObject("bookReadResponseDTO", readResponseDto);
         modelAndView.setViewName("book/read");
 
+        return modelAndView;
+    }
+
+    @GetMapping("/book/edit/{bookId}")
+    public ModelAndView edit(@PathVariable Integer bookId) throws NoSuchElementException {
+        ModelAndView modelAndView = new ModelAndView();
+
+        BookEditResponseDTO editResponseDto = this.bookService.edit(bookId);
+        modelAndView.addObject("bookEditResponseDTO", editResponseDto);
+        modelAndView.setViewName("book/edit");
         return modelAndView;
     }
 
