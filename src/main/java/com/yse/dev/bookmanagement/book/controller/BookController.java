@@ -44,7 +44,7 @@ public class BookController {
     @GetMapping("/read/{bookId}")
     public String read(@PathVariable Integer bookId, Model model) {
         try {
-            BookReadResponseDTO readResponseDto = bookService.read(bookId);
+            BookEditResponseDTO readResponseDto = bookService.read(bookId);
             model.addAttribute("bookReadResponseDTO", readResponseDto);
             return "book/read";
         } catch (NoSuchElementException e) {
