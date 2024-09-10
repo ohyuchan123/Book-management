@@ -1,11 +1,13 @@
 package com.yse.dev.bookmanagement.book.controller;
 
 import com.yse.dev.bookmanagement.book.dto.BookCreateDTO;
+import com.yse.dev.bookmanagement.book.dto.BookEditResponseDTO;
 import com.yse.dev.bookmanagement.book.dto.BookReadResponseDTO;
 import com.yse.dev.bookmanagement.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,23 +35,35 @@ public class BookController {
         return String.format("redirect:/book/read/%s",bookId);
     }
 
+    @ExceptionHandler(NoSuchElementException.class)
+    public ModelAndView handleNoSuchElementException(NoSuchElementException e){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
+        modelAndView.addObject("message", "Book not found");
+        modelAndView.addObject("location","/book/list");
+        modelAndView.setViewName("common/error/422");
+        return modelAndView;
+    }
+
     @GetMapping("/book/read/{bookId}")
-    public ModelAndView read(@PathVariable Integer bookId){
+    public ModelAndView read(@PathVariable Integer bookId) throws NoSuchElementException {
         ModelAndView modelAndView = new ModelAndView(); // 뷰와 데이터를 함께 반환하기 위한 객체 생성
 
-        try {
-            // bookId를 사용하여 도서 정보를 읽음(서비스 계층 호출)
-            BookReadResponseDTO readResponseDto = this.bookService.read(bookId);
-            modelAndView.addObject("bookReadResponseDTO", readResponseDto);
-            modelAndView.setViewName("book/read");
-        }catch (NoSuchElementException e){
-            // 도서를 찾을 수 없는 경우 (NoSuchElementException 발생 시 예외 처리)
-            modelAndView.setStatus(HttpStatus.UNPROCESSABLE_ENTITY); // HTTP 상태 코드 422 설정
-            modelAndView.addObject("message", "Book not found");
-            modelAndView.addObject("location","/book"); // 사용자에게 보여줄 리디렉션 위치 정보 추가
-            modelAndView.setViewName("common/error/422");
-        }
+        // bookId를 사용하여 도서 정보를 읽음(서비스 계층 호출)
+        BookReadResponseDTO readResponseDto = this.bookService.read(bookId);
+        modelAndView.addObject("bookReadResponseDTO", readResponseDto);
+        modelAndView.setViewName("book/read");
 
+        return modelAndView;
+    }
+
+    @GetMapping("/book/edit/{bookId}")
+    public ModelAndView edit(@PathVariable Integer bookId) throws NoSuchElementException {
+        ModelAndView modelAndView = new ModelAndView();
+
+        BookEditResponseDTO editResponseDto = this.bookService.edit(bookId);
+        modelAndView.addObject("bookEditResponseDTO", editResponseDto);
+        modelAndView.setViewName("book/edit");
         return modelAndView;
     }
 

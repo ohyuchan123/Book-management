@@ -1,6 +1,7 @@
 package com.yse.dev.bookmanagement.book.service;
 
 import com.yse.dev.bookmanagement.book.dto.BookCreateDTO;
+import com.yse.dev.bookmanagement.book.dto.BookEditResponseDTO;
 import com.yse.dev.bookmanagement.book.dto.BookReadResponseDTO;
 import com.yse.dev.bookmanagement.book.entity.Book;
 import com.yse.dev.bookmanagement.book.repository.BookRepository;
@@ -33,5 +34,10 @@ public class BookService {
         BookReadResponseDTO bookReadResponseDto = new BookReadResponseDTO();
         bookReadResponseDto.fromBook(book);
         return bookReadResponseDto;
+    }
+
+    public BookEditResponseDTO edit(Integer bookId) throws NoSuchElementException {
+        Book book = this.bookRepository.findById(bookId).orElseThrow();
+        return BookEditResponseDTO.BookFactory(book);
     }
 }
