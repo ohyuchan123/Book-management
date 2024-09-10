@@ -35,14 +35,18 @@ public class BookController {
         return String.format("redirect:/book/read/%s",bookId);
     }
 
+    private ModelAndView error422(String message, String location) {
+        ModelAndView mav = new ModelAndView();
+        mav.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
+        mav.addObject("message", message);
+        mav.addObject("location", location);
+        mav.setViewName("common/error/422");
+        return mav;
+    }
+
     @ExceptionHandler(NoSuchElementException.class)
     public ModelAndView handleNoSuchElementException(NoSuchElementException e){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
-        modelAndView.addObject("message", "Book not found");
-        modelAndView.addObject("location","/book/list");
-        modelAndView.setViewName("common/error/422");
-        return modelAndView;
+        return this.error422("책 정보가 없습니다.", "/book/list");
     }
 
     @GetMapping("/book/read/{bookId}")
