@@ -15,13 +15,14 @@ public class BookEditResponseDTO {
     private Integer price;
     private LocalDateTime insertDateTime;
 
-    public BookEditResponseDTO fromBook(Book book) {
-        this.bookId = book.getBookId();
-        this.title = book.getTitle();
-        this.price = book.getPrice();
-        this.insertDateTime = book.getLocalDateTime();
-
-        return this;
+    // 정적 팩토리 메서드로 전환하여 불변성과 가독성을 강화
+    public static BookEditResponseDTO fromBook(Book book) {
+        BookEditResponseDTO dto = new BookEditResponseDTO();
+        dto.bookId = book.getBookId();
+        dto.title = book.getTitle();
+        dto.price = book.getPrice();
+        dto.insertDateTime = book.getLocalDateTime();
+        return dto;
     }
 
     public static BookEditResponseDTO BookFactory(Book book) {

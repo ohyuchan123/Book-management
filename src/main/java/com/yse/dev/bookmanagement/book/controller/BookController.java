@@ -1,70 +1,88 @@
 package com.yse.dev.bookmanagement.book.controller;
 
-import com.yse.dev.bookmanagement.book.dto.BookCreateDTO;
-import com.yse.dev.bookmanagement.book.dto.BookEditResponseDTO;
-import com.yse.dev.bookmanagement.book.dto.BookReadResponseDTO;
+import com.yse.dev.bookmanagement.book.dto.*;
 import com.yse.dev.bookmanagement.book.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.NoSuchElementException;
 
 @Controller// 이 어노테이션에 있는 클래스는 스프링 부트가 브라우저의 요청을 받아들이는 컨트롤러라고 인지해서
 // 자바 빈으로 등록해서 관리하게 됩니다. 즉, 프레임워크에서 관리하는 클래스가 됩니다.
+@RequestMapping("/book")
 public class BookController {
 
-    @Autowired
-    BookService bookService;
+    private final BookService bookService;
 
-    @GetMapping("/book/create")
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @GetMapping("/create")
     public String create(){
         // create 메소드는 브라우저에서 book/create 주소가 HTTP GET 방식으로 입력되었을 때
         // book/create 경로의 뷰를 보여주는 컨트롤러 메소드입니다.
         return "/book/create";
     }
 
-    @PostMapping("/book/create")
-    public String insert(BookCreateDTO bookCreateDTO){
-        Integer bookId = this.bookService.insert(bookCreateDTO);
-        return String.format("redirect:/book/read/%s",bookId);
+    @PostMapping("/create")
+    public String insert(@Valid @ModelAttribute BookCreateDTO bookCreateDTO,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
+        // Valid 어노테이션을 추가하여 입력 데이터의 유효성을 검사합니다.
+        if (bindingResult.hasErrors()) {
+            return "book/create";
+        }
+        Integer bookId = bookService.insert(bookCreateDTO);
+        return "redirect:/book/read/" + bookId;
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ModelAndView handleNoSuchElementException(NoSuchElementException e){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
-        modelAndView.addObject("message", "Book not found");
-        modelAndView.addObject("location","/book/list");
-        modelAndView.setViewName("common/error/422");
-        return modelAndView;
+    @GetMapping("/read/{bookId}")
+    public String read(@PathVariable Integer bookId, Model model) {
+        try {
+            BookEditResponseDTO readResponseDto = bookService.read(bookId);
+            model.addAttribute("bookReadResponseDTO", readResponseDto);
+            return "book/read";
+        } catch (NoSuchElementException e) {
+            return "redirect:/book/list";
+        }
     }
 
-    @GetMapping("/book/read/{bookId}")
-    public ModelAndView read(@PathVariable Integer bookId) throws NoSuchElementException {
-        ModelAndView modelAndView = new ModelAndView(); // 뷰와 데이터를 함께 반환하기 위한 객체 생성
-
-        // bookId를 사용하여 도서 정보를 읽음(서비스 계층 호출)
-        BookReadResponseDTO readResponseDto = this.bookService.read(bookId);
-        modelAndView.addObject("bookReadResponseDTO", readResponseDto);
-        modelAndView.setViewName("book/read");
-
-        return modelAndView;
+    @GetMapping("/edit/{bookId}")
+    public String edit(@PathVariable Integer bookId, Model model) {
+        try {
+            BookEditResponseDTO editResponseDto = bookService.edit(bookId);
+            model.addAttribute("bookEditResponseDTO", editResponseDto);
+            return "book/edit";
+        } catch (NoSuchElementException e) {
+            return "redirect:/book/list";
+        }
     }
 
-    @GetMapping("/book/edit/{bookId}")
-    public ModelAndView edit(@PathVariable Integer bookId) throws NoSuchElementException {
-        ModelAndView modelAndView = new ModelAndView();
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception e, Model model) {
+        model.addAttribute("message", e.getMessage());
+        model.addAttribute("location", "/book/list");
+        return "common/error/422";
+    }
 
-        BookEditResponseDTO editResponseDto = this.bookService.edit(bookId);
-        modelAndView.addObject("bookEditResponseDTO", editResponseDto);
-        modelAndView.setViewName("book/edit");
-        return modelAndView;
+    @PostMapping("/edit/{bookId}")
+    public String update(@Valid @ModelAttribute BookEditDto bookEditDto,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes){
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.bookEditResponseDTO", bindingResult);
+            redirectAttributes.addFlashAttribute("bookEditDto", bookEditDto);
+
+            return "redirect:/book/edit/" + bookEditDto.getBookId();
+        }
+
+        bookService.update(bookEditDto);
+        return "redirect:/book/read/" + bookEditDto.getBookId();
     }
 
 }
